@@ -1,0 +1,51 @@
+# Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv("globalterrorismdb_0718dist.csv", encoding='latin1')
+
+# Display basic information about the dataset
+print("Basic Information about the dataset:")
+print(df.info())
+
+# Display the first few rows of the dataset
+print("\nFirst few rows of the dataset:")
+print(df.head())
+
+# Summary statistics
+print("\nSummary statistics of numerical columns:")
+print(df.describe())
+
+# Check for missing values
+print("\nMissing values in the dataset:")
+print(df.isnull().sum())
+
+# Explore unique values in categorical columns
+print("\nUnique values in categorical columns:")
+for column in df.select_dtypes(include='object').columns:
+    print(f"{column}: {df[column].nunique()} unique values")
+
+# Visualizations
+plt.figure(figsize=(10, 6))
+
+# Plot a bar chart of the number of terrorist attacks by year
+sns.countplot(x='iyear', data=df)
+plt.title('Number of Terrorist Attacks by Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Attacks')
+plt.xticks(rotation=45)
+plt.show()
+
+# Plot a pie chart of the most common attack types
+plt.figure(figsize=(8, 8))
+df['attacktype1_txt'].value_counts().plot.pie(autopct='%1.1f%%', startangle=90)
+plt.title('Distribution of Attack Types')
+plt.show()
+
+# Plot a heatmap of correlation matrix for numerical columns
+plt.figure(figsize=(12, 8))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Matrix')
+plt.show()
